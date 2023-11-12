@@ -1,16 +1,26 @@
 package view;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-
 import model.Transaction;
-
-import java.util.List;
 
 public class ExpenseTrackerView extends JFrame {
 
@@ -19,6 +29,7 @@ public class ExpenseTrackerView extends JFrame {
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
+  private JButton undoButton; //simran
 
   // private JTextField dateFilterField;
   private JTextField categoryFilterField;
@@ -41,6 +52,7 @@ public class ExpenseTrackerView extends JFrame {
     transactionsTable = new JTable(model);
 
     addTransactionBtn = new JButton("Add Transaction");
+    undoButton = new JButton("undo"); //simran
 
     // Create UI components
     JLabel amountLabel = new JLabel("Amount:");
@@ -61,6 +73,7 @@ public class ExpenseTrackerView extends JFrame {
     JLabel amountFilterLabel = new JLabel("Filter by Amount:");
     amountFilterField = new JTextField(10);
     amountFilterBtn = new JButton("Filter by Amount");
+
   
 
   
@@ -68,17 +81,18 @@ public class ExpenseTrackerView extends JFrame {
     JPanel inputPanel = new JPanel();
     inputPanel.add(amountLabel);
     inputPanel.add(amountField);
-    inputPanel.add(categoryLabel); 
+    inputPanel.add(categoryLabel);
     inputPanel.add(categoryField);
     inputPanel.add(addTransactionBtn);
 
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
+    buttonPanel.add(undoButton);  //simran
   
     // Add panels to frame
     add(inputPanel, BorderLayout.NORTH);
-    add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
+    add(new JScrollPane(transactionsTable), BorderLayout.CENTER);
     add(buttonPanel, BorderLayout.SOUTH);
   
     // Set frame properties
@@ -132,6 +146,12 @@ public class ExpenseTrackerView extends JFrame {
   public void addApplyAmountFilterListener(ActionListener listener) {
     amountFilterBtn.addActionListener(listener);
   }
+  //simran
+  public void applyundoActionListener(ActionListener listener)
+  {
+    undoButton.addActionListener(listener);
+  }
+  //simran
 
   public double getAmountFilterInput() {
     String input = JOptionPane.showInputDialog(this, "Enter Amount Filter:");
@@ -157,7 +177,7 @@ public class ExpenseTrackerView extends JFrame {
   
       // Add rows from transactions list
       for(Transaction t : transactions) {
-        model.addRow(new Object[]{rowNum+=1,t.getAmount(), t.getCategory(), t.getTimestamp()}); 
+        model.addRow(new Object[]{rowNum+=1,t.getAmount(), t.getCategory(), t.getTimestamp()});
       }
       // Add total row
       Object[] totalRow = {"Total", null, null, totalCost};
@@ -165,13 +185,26 @@ public class ExpenseTrackerView extends JFrame {
   
       // Fire table update
       transactionsTable.updateUI();
-  
-    }  
+      
+      //simran start
+      if(transactions!=null){
+        //allow row selection in table
+        
+        transactionsTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+      }
+      else{
+        transactionsTable.setRowSelectionAllowed(false);
+      }
+      //simran end
+      
+       
+    }
   
 
   public JButton getAddTransactionBtn() {
     return addTransactionBtn;
   }
+
 
 
   public void highlightRows(List<Integer> rowIndexes) {
@@ -193,6 +226,13 @@ public class ExpenseTrackerView extends JFrame {
 
       transactionsTable.repaint();
   }
-
-
+  //simran
+  public int get_row_Index(){
+    AtomicInteger row = new AtomicInteger();
+    row.set(transactionsTable.getSelectedRow());
+    return row.get();
+  }
+  
 }
+
+

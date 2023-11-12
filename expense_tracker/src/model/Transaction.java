@@ -1,10 +1,9 @@
 package model;
 
-import controller.InputValidation;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+
+import controller.InputValidation;
 
 public class Transaction {
 
@@ -44,7 +43,7 @@ public class Transaction {
   }
 
   // public void setCategory(String category) {
-  //   this.category = category; 
+  //   this.category = category;
   // }
   
   public String getTimestamp() {
@@ -52,7 +51,7 @@ public class Transaction {
   }
   //private helper method to generate timestamp
   private String generateTimestamp() {
-     return dateFormatter.format(new Date());
+  return dateFormatter.format(new Date());
   }
 
 }

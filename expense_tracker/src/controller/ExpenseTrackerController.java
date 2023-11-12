@@ -1,7 +1,5 @@
 package controller;
 
-import view.ExpenseTrackerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +8,15 @@ import javax.swing.JOptionPane;
 import model.ExpenseTrackerModel;
 import model.Transaction;
 import model.Filter.TransactionFilter;
+import view.ExpenseTrackerView;
 
 public class ExpenseTrackerController {
   
   private ExpenseTrackerModel model;
   private ExpenseTrackerView view;
-  /** 
+  /**
    * The Controller is applying the Strategy design pattern.
-   * This is the has-a relationship with the Strategy class 
+   * This is the has-a relationship with the Strategy class
    * being used in the applyFilter method.
    */
   private TransactionFilter filter;
@@ -72,4 +71,23 @@ public class ExpenseTrackerController {
       view.toFront();}
 
   }
+  //simran start
+  public void removeTransaction(int row){
+    List<Transaction> transactions = model.getTransactions();
+    if(transactions!=null)
+    {
+      if (row >= 0) {
+        model.removeTransaction(transactions.get(row));
+        refresh();
+        JOptionPane.showMessageDialog(view, "Selected transaction removed");
+        view.toFront();
+      }
+    }
+    if(transactions.isEmpty()){
+      JOptionPane.showMessageDialog(view, "Nothing to undo");
+      view.toFront();
+    }
+
+  }
+ //simran end
 }

@@ -1,9 +1,10 @@
 import javax.swing.JOptionPane;
+
 import controller.ExpenseTrackerController;
 import model.ExpenseTrackerModel;
-import view.ExpenseTrackerView;
 import model.Filter.AmountFilter;
 import model.Filter.CategoryFilter;
+import view.ExpenseTrackerView;
 
 public class ExpenseTrackerApp {
 
@@ -20,6 +21,8 @@ public class ExpenseTrackerApp {
 
     // Initialize view
     view.setVisible(true);
+
+
 
 
 
@@ -67,7 +70,11 @@ public class ExpenseTrackerApp {
     JOptionPane.showMessageDialog(view,exception.getMessage());
     view.toFront();
    }});
+   view.applyundoActionListener(e -> {
+    int row=view.get_row_Index();
+    controller.removeTransaction(row);
+      });
     
-
   }
+  
 }
