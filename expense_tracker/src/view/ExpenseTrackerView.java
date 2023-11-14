@@ -29,7 +29,7 @@ public class ExpenseTrackerView extends JFrame {
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
-  private JButton undoButton; //simran
+  private JButton undoButton; 
 
   // private JTextField dateFilterField;
   private JTextField categoryFilterField;
@@ -52,7 +52,8 @@ public class ExpenseTrackerView extends JFrame {
     transactionsTable = new JTable(model);
 
     addTransactionBtn = new JButton("Add Transaction");
-    undoButton = new JButton("undo"); //simran
+    undoButton = new JButton("undo"); 
+    disableUndoButton(); // diabled initially when there are no transactions
 
     // Create UI components
     JLabel amountLabel = new JLabel("Amount:");
@@ -88,7 +89,7 @@ public class ExpenseTrackerView extends JFrame {
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
-    buttonPanel.add(undoButton);  //simran
+    buttonPanel.add(undoButton);  
   
     // Add panels to frame
     add(inputPanel, BorderLayout.NORTH);
@@ -107,6 +108,7 @@ public class ExpenseTrackerView extends JFrame {
     return model;
   }
     
+  
 
   public JTable getTransactionsTable() {
     return transactionsTable;
@@ -146,12 +148,23 @@ public class ExpenseTrackerView extends JFrame {
   public void addApplyAmountFilterListener(ActionListener listener) {
     amountFilterBtn.addActionListener(listener);
   }
-  //simran
+  
   public void applyundoActionListener(ActionListener listener)
   {
     undoButton.addActionListener(listener);
   }
-  //simran
+  
+ 
+  public void enableUndoButton() {
+    undoButton.setEnabled(true);
+}
+ 
+public void disableUndoButton() {
+  undoButton.setEnabled(false);
+}
+  public JButton getUndoBtn() {
+    return undoButton;
+  }
 
   public double getAmountFilterInput() {
     String input = JOptionPane.showInputDialog(this, "Enter Amount Filter:");
@@ -186,7 +199,7 @@ public class ExpenseTrackerView extends JFrame {
       // Fire table update
       transactionsTable.updateUI();
       
-      //simran start
+      
       if(transactions!=null){
         //allow row selection in table
         
@@ -195,10 +208,8 @@ public class ExpenseTrackerView extends JFrame {
       else{
         transactionsTable.setRowSelectionAllowed(false);
       }
-      //simran end
-      
-       
-    }
+    
+      }
   
 
   public JButton getAddTransactionBtn() {
@@ -226,7 +237,7 @@ public class ExpenseTrackerView extends JFrame {
 
       transactionsTable.repaint();
   }
-  //simran
+  //method to return selected row index
   public int get_row_Index(){
     AtomicInteger row = new AtomicInteger();
     row.set(transactionsTable.getSelectedRow());

@@ -1,5 +1,6 @@
 // package test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -157,12 +158,43 @@ public class TestExample {
         String filterCategory = "entertainment";
         TransactionFilter filter = new CategoryFilter(filterCategory);
         List<Transaction> filteredTransactions = filter.filter(model.getTransactions());
-        assertEquals(1, filteredTransactions.size());
+        assertEquals(1, filteredTransactions.size()); // Only one transaction should match
         Transaction filteredTransaction = filteredTransactions.get(0);
-        assertEquals(transaction2, filteredTransaction);
+        assertEquals(transaction2, filteredTransaction); // Check that the correct transaction is returned
     }
 
+    @Test
+    public void testUndoEmptyList() {
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+
+        // Attempt to undo if the list is empty. The Undo button should be disabled.
+        assertFalse(view.getUndoBtn().isEnabled());
+    }
     
+    @Test
+    public void testUndoAllowed() {
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+
+        // Add a transaction and check that it is added to the model
+        //Transaction transaction = new Transaction(50.0, "food");
+        controller.addTransaction(50, "food" );
+        assertEquals(2,view.getTableModel().getRowCount());
+        //assertEquals(1, model.getTransactions().size());
+
+        assertEquals(50.0, getTotalCost(), 0.01);
+
+        // Remove the transaction and check that it is removed from the model
+        controller.undo(0);
+        //assertEquals(0, model.getTransactions().size());
+        assertEquals(1,view.getTableModel().getRowCount());
+        // check that the total cost is 0
+        assertEquals(0, getTotalCost(), 0.01);
+        
+
+        
+    }
 
     
 }

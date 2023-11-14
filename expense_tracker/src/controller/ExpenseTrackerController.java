@@ -46,6 +46,7 @@ public class ExpenseTrackerController {
     
     Transaction t = new Transaction(amount, category);
     model.addTransaction(t);
+    view.enableUndoButton();
     view.getTableModel().addRow(new Object[]{t.getAmount(), t.getCategory(), t.getTimestamp()});
     refresh();
     return true;
@@ -71,23 +72,23 @@ public class ExpenseTrackerController {
       view.toFront();}
 
   }
-  //simran start
-  public void removeTransaction(int row){
+  //method to remove a transaction
+  public void undo(int row){
     List<Transaction> transactions = model.getTransactions();
     if(transactions!=null)
     {
       if (row >= 0) {
-        model.removeTransaction(transactions.get(row));
+        model.removeTransaction(transactions.get(row)); // call the remove transactrion method to remove the selected transaction
         refresh();
         JOptionPane.showMessageDialog(view, "Selected transaction removed");
         view.toFront();
       }
     }
     if(transactions.isEmpty()){
-      JOptionPane.showMessageDialog(view, "Nothing to undo");
+      JOptionPane.showMessageDialog(view, "Nothing to undo"); //if there are no transactions in the list
       view.toFront();
     }
 
   }
- //simran end
+ 
 }

@@ -70,9 +70,10 @@ public class ExpenseTrackerApp {
     JOptionPane.showMessageDialog(view,exception.getMessage());
     view.toFront();
    }});
+   // add action listener to the undo button
    view.applyundoActionListener(e -> {
-    int row=view.get_row_Index();
-    controller.removeTransaction(row);
+    int row=view.get_row_Index(); //get selected row index
+    controller.undo(row); // undo selected row
       });
     
   }
