@@ -2,6 +2,7 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,19 +120,21 @@ public class TestExample {
 
     @Test
     public void testFilterByAmount() {
-        // Create a list of transactions with different amounts
-        List<Transaction> transactions = new ArrayList<>();
+        // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+
+        // Add multiple transactions with different categories
         Transaction transaction1 = new Transaction(50.0, "food");
         Transaction transaction2 = new Transaction(100.0, "entertainment");
         Transaction transaction3 = new Transaction(75.0, "travel");
-        transactions.add(transaction1);
-        transactions.add(transaction2);
-        transactions.add(transaction3);
+        model.addTransaction(transaction1);
+        model.addTransaction(transaction2);
+        model.addTransaction(transaction3);
 
         // Apply amount filter and check that only matching transactions are returned
         double filterAmount = 100.0;
         TransactionFilter filter = new AmountFilter(filterAmount);
-        List<Transaction> filteredTransactions = filter.filter(transactions);
+        List<Transaction> filteredTransactions = filter.filter(model.getTransactions());
         assertEquals(1, filteredTransactions.size());
         Transaction filteredTransaction = filteredTransactions.get(0);
         assertEquals(transaction2, filteredTransaction);
@@ -139,25 +142,27 @@ public class TestExample {
 
     @Test
     public void testFilterByCategory() {
-        // Create a list of transactions with different categories
-        List<Transaction> transactions = new ArrayList<>();
+       // Pre-condition: List of transactions is empty
+        assertEquals(0, model.getTransactions().size());
+
+        // Add multiple transactions with different categories
         Transaction transaction1 = new Transaction(50.0, "food");
         Transaction transaction2 = new Transaction(100.0, "entertainment");
         Transaction transaction3 = new Transaction(75.0, "travel");
-        transactions.add(transaction1);
-        transactions.add(transaction2);
-        transactions.add(transaction3);
+        model.addTransaction(transaction1);
+        model.addTransaction(transaction2);
+        model.addTransaction(transaction3);
 
         // Apply category filter and check that only matching transactions are returned
         String filterCategory = "entertainment";
         TransactionFilter filter = new CategoryFilter(filterCategory);
-        List<Transaction> filteredTransactions = filter.filter(transactions);
+        List<Transaction> filteredTransactions = filter.filter(model.getTransactions());
         assertEquals(1, filteredTransactions.size());
         Transaction filteredTransaction = filteredTransactions.get(0);
         assertEquals(transaction2, filteredTransaction);
     }
 
-
+    
 
     
 }
